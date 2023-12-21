@@ -21,10 +21,10 @@ public:
 	UCharacterModifier_AddHealthComponent() {}
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "AbilitySystem")
+	UPROPERTY(EditDefaultsOnly, Category = "AddHealthComponent")
 	TSoftClassPtr<UHealthComponent> ComponentClass{ nullptr };
 
-	UPROPERTY(EditDefaultsOnly, Category = "AbilitySystem")
+	UPROPERTY(EditDefaultsOnly, Category = "AddHealthComponent")
 	TSoftObjectPtr<UHealthData> HealthData{ nullptr };
 
 protected:
