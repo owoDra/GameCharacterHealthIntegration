@@ -8,24 +8,23 @@
 #include "HealthData.h"
 
 #include "GameFramework/Pawn.h"
-#include "Net/UnrealNetwork.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(CharacterModifier_AddHealthComponent)
 
 
-void UCharacterModifier_AddHealthComponent::OnApply(APawn* Pawn) const
+UCharacterModifier_AddHealthComponent::UCharacterModifier_AddHealthComponent()
 {
-	check(Pawn)
+	bOnlyApplyOnLocal = false;
+	bApplyOnClient = false;
+	bApplyOnServer = true;
+}
 
-	UE_LOG(LogGCHI, Log, TEXT("[%s] On Instance Apply(%s)"),
-		Pawn->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT"), *GetNameSafe(this));
 
-	const auto* World{ Pawn->GetWorld() };
-	const auto bIsServer{ World->GetNetMode() != NM_Client };
+bool UCharacterModifier_AddHealthComponent::OnApply(APawn* Pawn) const
+{
+	const auto bCanApply{ Super::OnApply(Pawn) };
 
-	UE_LOG(LogGCHI, Log, TEXT("Adding components for %s to world %s"), *GetPathNameSafe(Pawn), *World->GetDebugDisplayName());
-
-	if (bIsServer)
+	if (bCanApply)
 	{
 		auto* LoadedComponentClass
 		{
@@ -51,4 +50,6 @@ void UCharacterModifier_AddHealthComponent::OnApply(APawn* Pawn) const
 			NewHC->SetHealthData(LoadedHealthData);
 		}
 	}
+
+	return bCanApply;
 }

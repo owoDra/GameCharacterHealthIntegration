@@ -18,7 +18,7 @@ class UCharacterModifier_AddHealthComponent final : public UCharacterModifier
 {
 	GENERATED_BODY()
 public:
-	UCharacterModifier_AddHealthComponent() {}
+	UCharacterModifier_AddHealthComponent();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AddHealthComponent")
@@ -28,6 +28,6 @@ protected:
 	TSoftObjectPtr<UHealthData> HealthData{ nullptr };
 
 protected:
-	virtual void OnApply(APawn* Pawn) const override;
+	virtual bool OnApply(APawn* Pawn) const override;
 
 };

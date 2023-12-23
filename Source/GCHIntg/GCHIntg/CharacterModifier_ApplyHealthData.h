@@ -17,13 +17,13 @@ class UCharacterModifier_ApplyHealthData final : public UCharacterModifier
 {
 	GENERATED_BODY()
 public:
-	UCharacterModifier_ApplyHealthData() {}
+	UCharacterModifier_ApplyHealthData();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ApplyHealthData")
 	TSoftObjectPtr<UHealthData> HealthData{ nullptr };
 
 protected:
-	virtual void OnApply(APawn* Pawn) const override;
+	virtual bool OnApply(APawn* Pawn) const override;
 
 };

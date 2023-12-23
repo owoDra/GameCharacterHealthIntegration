@@ -13,17 +13,19 @@
 #include UE_INLINE_GENERATED_CPP_BY_NAME(CharacterModifier_ApplyHealthData)
 
 
-void UCharacterModifier_ApplyHealthData::OnApply(APawn* Pawn) const
+UCharacterModifier_ApplyHealthData::UCharacterModifier_ApplyHealthData()
 {
-	check(Pawn)
+	bOnlyApplyOnLocal = false;
+	bApplyOnClient = false;
+	bApplyOnServer = true;
+}
 
-	UE_LOG(LogGCHI, Log, TEXT("[%s] On Instance Apply(%s)"),
-		Pawn->HasAuthority() ? TEXT("SERVER") : TEXT("CLIENT"), *GetNameSafe(this));
 
-	const auto* World{ Pawn->GetWorld() };
-	const auto bIsServer{ World->GetNetMode() != NM_Client };
+bool UCharacterModifier_ApplyHealthData::OnApply(APawn* Pawn) const
+{
+	const auto bCanApply{ Super::OnApply(Pawn) };
 
-	if (bIsServer)
+	if (bCanApply)
 	{
 		if (auto* HC{ UHealthFunctionLibrary::GetHealthComponentFromActor(Pawn) })
 		{
@@ -38,4 +40,6 @@ void UCharacterModifier_ApplyHealthData::OnApply(APawn* Pawn) const
 			HC->SetHealthData(LoadedHealthData);
 		}
 	}
+
+	return bCanApply;
 }
