@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "CharacterModifier.h"
+#include "Recipe/CharacterRecipe.h"
 
-#include "CharacterModifier_AddHealthComponent.generated.h"
+#include "CharacterRecipe_AddHealthComponent.generated.h"
 
 class UHealthComponent;
 class UHealthData;
@@ -13,12 +13,12 @@ class UHealthData;
 /**
  * Modifier class to add health component to Pawn
  */
-UCLASS(meta = (DisplayName = "CM Add Health Component"))
-class UCharacterModifier_AddHealthComponent final : public UCharacterModifier
+UCLASS()
+class UCharacterRecipe_AddHealthComponent final : public UCharacterRecipe
 {
 	GENERATED_BODY()
 public:
-	UCharacterModifier_AddHealthComponent();
+	UCharacterRecipe_AddHealthComponent();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AddHealthComponent")
@@ -28,6 +28,6 @@ protected:
 	TSoftObjectPtr<UHealthData> HealthData{ nullptr };
 
 protected:
-	virtual bool OnApply(APawn* Pawn) const override;
+	virtual void StartSetupNonInstanced_Implementation(FCharacterRecipePawnInfo Info) const override;
 
 };
