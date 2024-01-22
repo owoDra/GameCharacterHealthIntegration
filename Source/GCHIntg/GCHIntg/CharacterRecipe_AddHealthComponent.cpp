@@ -2,12 +2,11 @@
 
 #include "CharacterRecipe_AddHealthComponent.h"
 
-#include "GCHIntgLogs.h"
-
 #include "HealthComponent.h"
 #include "HealthData.h"
 
 #include "CharacterInitStateComponent.h"
+#include "GCExtLogs.h"
 
 #include "GameFramework/Pawn.h"
 
@@ -18,6 +17,11 @@ UCharacterRecipe_AddHealthComponent::UCharacterRecipe_AddHealthComponent()
 {
 	InstancingPolicy = ECharacterRecipeInstancingPolicy::NonInstanced;
 	NetExecutionPolicy = ECharacterRecipeNetExecutionPolicy::ServerOnly;
+
+#if WITH_EDITOR
+	StaticClass()->FindPropertyByName(FName{ TEXTVIEW("InstancingPolicy") })->SetPropertyFlags(CPF_DisableEditOnTemplate);
+	StaticClass()->FindPropertyByName(FName{ TEXTVIEW("NetExecutionPolicy") })->SetPropertyFlags(CPF_DisableEditOnTemplate);
+#endif
 }
 
 
@@ -36,7 +40,7 @@ void UCharacterRecipe_AddHealthComponent::StartSetupNonInstanced_Implementation(
 		auto* NewHC{ NewObject<UHealthComponent>(Pawn, LoadedComponentClass) };
 		NewHC->RegisterComponent();
 
-		UE_LOG(LogGCHI, Log, TEXT("+Component (Name: %s, Class: %s)"), *GetNameSafe(NewHC), *GetNameSafe(LoadedComponentClass));
+		UE_LOG(LogGameExt_CharacterRecipe, Log, TEXT("+Component (Name: %s, Class: %s)"), *GetNameSafe(NewHC), *GetNameSafe(LoadedComponentClass));
 
 		auto* LoadedHealthData
 		{
@@ -44,7 +48,7 @@ void UCharacterRecipe_AddHealthComponent::StartSetupNonInstanced_Implementation(
 			HealthData.IsValid() ? HealthData.Get() : HealthData.LoadSynchronous()
 		};
 
-		UE_LOG(LogGCHI, Log, TEXT("++HealthData (Name: %s)"), *GetNameSafe(LoadedHealthData));
+		UE_LOG(LogGameExt_CharacterRecipe, Log, TEXT("++HealthData (Name: %s)"), *GetNameSafe(LoadedHealthData));
 
 		NewHC->SetHealthData(LoadedHealthData);
 	}

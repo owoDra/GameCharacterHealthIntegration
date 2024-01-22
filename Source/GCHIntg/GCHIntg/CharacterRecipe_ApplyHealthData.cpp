@@ -2,13 +2,12 @@
 
 #include "CharacterRecipe_ApplyHealthData.h"
 
-#include "GCHIntgLogs.h"
-
 #include "HealthFunctionLibrary.h"
 #include "HealthComponent.h"
 #include "HealthData.h"
 
 #include "CharacterInitStateComponent.h"
+#include "GCExtLogs.h"
 
 #include "GameFramework/Pawn.h"
 
@@ -19,6 +18,11 @@ UCharacterRecipe_ApplyHealthData::UCharacterRecipe_ApplyHealthData()
 {
 	InstancingPolicy = ECharacterRecipeInstancingPolicy::NonInstanced;
 	NetExecutionPolicy = ECharacterRecipeNetExecutionPolicy::ServerOnly;
+
+#if WITH_EDITOR
+	StaticClass()->FindPropertyByName(FName{ TEXTVIEW("InstancingPolicy") })->SetPropertyFlags(CPF_DisableEditOnTemplate);
+	StaticClass()->FindPropertyByName(FName{ TEXTVIEW("NetExecutionPolicy") })->SetPropertyFlags(CPF_DisableEditOnTemplate);
+#endif
 }
 
 
@@ -34,7 +38,7 @@ void UCharacterRecipe_ApplyHealthData::StartSetupNonInstanced_Implementation(FCh
 			HealthData.IsValid() ? HealthData.Get() : HealthData.LoadSynchronous()
 		};
 
-		UE_LOG(LogGCHI, Log, TEXT("++HealthData (Name: %s)"), *GetNameSafe(LoadedHealthData));
+		UE_LOG(LogGameExt_CharacterRecipe, Log, TEXT("++HealthData (Name: %s)"), *GetNameSafe(LoadedHealthData));
 
 		HC->SetHealthData(LoadedHealthData);
 	}
